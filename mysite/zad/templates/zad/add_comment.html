@@ -1,0 +1,16 @@
+<form  method="POST" action="">{% csrf_token %}
+     {% if error_message %}
+
+    <small style="color:red"> {{error_message }}</small>
+     <br>
+    <br>
+    {% endif %}
+    {% for form in form %}
+        {{ form.help_text }}
+        {{ form}}
+        <br>
+        <br>
+    {% endfor %}
+    <input type="submit" value="comment">
+</form>
+

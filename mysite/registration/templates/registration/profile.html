@@ -1,0 +1,35 @@
+
+	<h1>
+		Profile
+	</h1>
+
+
+
+
+
+	<div>
+		{% if profile.picture %}
+			<p> Profile pic: </p>
+			<a href="{{ profile.picture.url }}" download>
+				<img width="180" src="{{ profile.picture.url }}" alt="Profile picture">
+			</a>
+		{% else %}
+			<p> Profile pic: Not provided </p>
+		{% endif %}
+		<br />
+		<br />
+		Username: {{ profile.user.first_name}}
+		<br />
+		<br />
+		Email: {{ profile.user.email }}
+		<br />
+	</div>
+
+
+	{% if profile.user.username == request.user.username %}
+		<div>
+			<p> Edit </p>
+		</div>
+	{% endif %}
+
+

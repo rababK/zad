@@ -1,0 +1,10 @@
+{% if not ads  %}
+<h4> you have not puplished any ad yet</h4>
+{% endif %}
+{% for ad in ads %}
+<li>  {{ ad.Ad_title}}</li>
+{% endfor%}
+
+
+
+

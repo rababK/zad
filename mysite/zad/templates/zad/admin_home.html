@@ -1,0 +1,26 @@
+{% if user.is_authenticated and user.is_staff %}
+        <h3> hello {{user.first_name}}</h3>
+{% if ads %}
+{% for ad in ads %}
+            {{ ad.AdType}}
+{% if not ad.approved_AD %}
+<h3><label > {{ad.AdDetails}}</label><br></h3>
+    </ul>
+
+<form action="{% url 'zad:AD_approve' ad.id %}" method="get">
+        <button type="submit"  onclick="">accept</button>
+
+</form>
+{% endif%}
+<form action="{% url 'zad:AD_remove' ad.id %}" method="get">
+        <button type="submit"  onclick="">delete</button>
+
+</form>
+
+
+{% endfor %}
+{% else %}
+<h2> no fun so far</h2>
+{% endif %}
+<li> <a href="{% url 'zad:user_logout' %}"> logout </a> </li>
+{% endif %}
