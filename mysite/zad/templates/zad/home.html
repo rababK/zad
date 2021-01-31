@@ -1,25 +1,37 @@
+{% load i18n %}
+
+
+<form action="{% url 'zad:set_language' %}" method="post">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}" />
+    <select name="language">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% for lang in LANGUAGES %}
+
+            <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                {{ lang.1 }} ({{ lang.0 }})
+            </option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Go" />
+</form>
 <h1>
-        welcome to zad app
+    {% trans "welcome to zad app" %}
 
 </h1>
 
 
-    {% for post in posts %}
+    {% for Ad in Ads %}
 
-<h1> <a href ="{% url 'zad:post_details' pk=post.id%}">{{ post.AD.Ad_title}}</a> </h1>
-<  h3> vote = {{post.vote}}</h3>
+<h1> <a href ="{% url 'zad:AD_details' pk=Ad.id%}">{{  Ad.Ad_title}}</a> </h1>
+<form method = 'POST' action = "{% url 'zad:like_Ad' pk=Ad.id%}">
+     {% csrf_token%}
+     <input type="submit" value="like">
+</form>
+<h1> <a href ="{% url 'zad:like_Ad' pk=Ad.id%}">LIKE</a> </h1>
+<  h3> vote = {{Ad.vote}}</h3>
 
-         {% for comment in post.comments.all %}
-<br>
-
-
-          {{ comment.comment_text}}
-
-         {% endfor %}
-
-         <form action="{% url 'zad:Add_comment' pk=post.id %}" >
-             <button type="submit"  onclick="">comment</button></h3>
-         </form>
 
 
             <br>
@@ -29,9 +41,8 @@
 
 
     <ul>
-    <li> <a href="{% url 'zad:Add_new_AD' %}"> add new AD </a> </li>
-        <li> <a href="{% url 'zad:Add_post' %}"> add post </a> </li>
-         <li> <a href="{% url 'zad:ContactUs' %}"> contact us </a> </li>
+    <li> <a href="{% url 'zad:Add_new_AD' %}"> {% trans "add new AD" %} </a> </li>
+         <li> <a href="{% url 'zad:ContactUs' %}"> {% trans "contact us" %} </a> </li>
 
-        <li> <a href="{% url 'zad:MyAd' %}"> show my ads </a> </li>
+        <li> <a href="{% url 'zad:MyAd' %}"> {% trans "show my ads" %} </a> </li>
     </ul>

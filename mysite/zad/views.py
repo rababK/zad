@@ -1,52 +1,41 @@
 from django.shortcuts import render
-from .forms import ADForm ,ContactForm,PostForm ,CommentForm
-
-
+from .forms import ADForm, ContactForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from .models import AD
+from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.decorators import login_required
-from .models import AD,post
+from django.utils import translation
+from django.conf import settings
 
-from django.core.mail import send_mail,BadHeaderError
-
-
-
+@login_required
 def home(request):
-    post.objects.all().filter(unvalid=True).delete()
-    posts =post.objects.all().filter(approved=True).order_by('vote')[:]
-
-
-    if request.user.is_authenticated and request.user.is_staff:
-        return HttpResponse(render(request, 'admin_home.html', {'posts': posts}))
-    else:
-        return HttpResponse(render(request, 'zad/home.html', {'posts': posts}))
+    Ads = AD.objects.all()
+    return HttpResponse(render(request, 'zad/home.html', {'Ads': Ads}))
 
 
 
-
+@login_required
 def Add_new_AD(request):
     if request.method == 'POST':
-        AD_form = ADForm(request.POST,request.FILES)
+        AD_form = ADForm(request.POST, request.FILES)
         if AD_form.is_valid():
-            ad=AD_form.save(commit=False)
-            print(ad.id)
-            print(ad.photo)
+            ad = AD_form.save(commit=False)
+            ad.user = request.user
+            ad.save()
             return HttpResponseRedirect(reverse('zad:home'))
 
         else:
             error_message = 'some data are missed'
             AD_form = ADForm()
-            return render(request, 'zad/Add_AD.html', {'form': AD_form,'error_message':error_message})
+            return render(request, 'zad/Add_AD.html', {'form': AD_form, 'error_message': error_message})
     else:
         AD_form = ADForm()
         return render(request, 'zad/Add_AD.html', {'form': AD_form})
 
-
-
-
-
+@login_required
 def ContactUs(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         contact_form = ContactForm(request.POST)
         if contact_form.is_valid():
             subject = contact_form.cleaned_data['subject']
@@ -62,50 +51,32 @@ def ContactUs(request):
         contact_form = ContactForm()
         return render(request, 'zad/contactUs.html', {'contact_form': contact_form})
 
+@login_required
+def AD_details(request, pk):
+    Ad = AD.objects.get(pk=pk)
+    return render(request, 'zad/Ad_details.html', {'Ad': Ad})
 
-def post_details (request, pk):
-    POST = post.objects.get(pk = pk)
-    return render(request, 'zad/post_details.html', {'post': POST})
-
-
-def MyAd (request):
+@login_required
+def MyAd(request):
     ads = AD.objects.all()[:]
     return render(request, 'zad/My_Ad.html', {'ads': ads})
 
 
 
-def Add_post(request):
-    if request.method == 'POST':
-        post_form = PostForm(request.POST,request.FILES)
-        if post_form.is_valid():
-            post= post_form.save(commit=False)
-            post.user = request.user
-            post.save()
+@login_required
+def like_Ad(request,pk):
 
-
-            return HttpResponseRedirect(reverse('zad:home'))
-        else:
-            error_message = 'some data are missed'
-            post_form = PostForm()
-            return render(request, 'zad/Add_post.html', {'form': post_form,'error_message':error_message})
+    Ad = AD.objects.get(pk=pk)
+    if Ad.likes.filter(id=request.user.id).exists():
+        Ad.likes.remove(request.user)
     else:
-        post_form = PostForm()
-        return render(request, 'zad/Add_post.html', {'form': post_form})
-
-def Add_comment(request,pk):
-    if request.method == 'POST':
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment= comment_form.save(commit=False)
-            comment.post = post.objects.get(pk=pk)
-            comment.save()
+        Ad.likes.add(request.user)
+    return HttpResponseRedirect(reverse('zad:home'))
 
 
-            return HttpResponseRedirect(reverse('zad:home'))
-        else:
-            error_message = 'some data are missed'
-            comment_form = CommentForm()
-            return render(request, 'zad/add_comment.html', {'form': comment_form,'error_message':error_message})
-    else:
-        comment_form = CommentForm()
-        return render(request, 'zad/add_comment.html', {'form': comment_form})
+@login_required
+def set_language(request):
+    language = request.POST.get('language', settings.LANGUAGE_CODE)
+    translation.activate(language)
+    request.session[translation.LANGUAGE_SESSION_KEY] = language
+    return HttpResponseRedirect(reverse('zad:home'))

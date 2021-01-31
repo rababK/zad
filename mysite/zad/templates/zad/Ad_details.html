@@ -1,0 +1,28 @@
+
+
+<!DOCTYPE html>
+{% load i18n %}
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Ad details </title>
+
+</head>
+<body>
+{{Ad.Ad_title}}<br><br>
+{{Ad.Ad_details}}<br><br>
+{{Ad.category}}<br><br>
+{{Ad.likes}}<br><br>
+{{Ad.term}}<br><br>
+<p> is it approved?{{Ad.approved}}<br><br></p>
+<p>  created at</p>{{Ad.created_at}}<br><br></p>
+<p>  last update</p>{{Ad.update_at}}<br><br></p>
+<p>  published at </p>{{Ad.publish_date}}<br><br></p>
+
+</body>
+</html>
+
+
+<label><img src="{{post.photo.url}}" alt="photo"></label>
+</body>
+</html>

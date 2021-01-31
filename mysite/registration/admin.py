@@ -1,32 +1,32 @@
 # accounts/admin.py
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import UserAdmin
 
 from .forms import AccountCreationForm
 from .models import Account
 
 
-class AccountAdmin(BaseUserAdmin):
+class AccountAdmin(UserAdmin):
     form = AccountCreationForm
 
 
-    list_display = ('email', 'first_name', 'is_admin','picture')
+    list_display = ('email', 'first_name','last_name', 'is_admin','email','password')
     list_filter = ('is_admin',)
 
     fieldsets = (
         (None, {'fields': ('email', 'is_admin', 'password')}),
-        ('Personal info', {'fields': ('name','picture')}),
+        ('Personal info', {'fields': ('first_name','last_name')}),
         ('Groups', {'fields': ('groups',)}),
         ('Permissions', {'fields': ('user_permissions',)}),
     )
     add_fieldsets = (
         (None, {'fields': ('email','is_admin', 'password1', 'password2')}),
-        ('Personal info', {'fields': ('name', 'picture')}),
+        ('Personal info', {'fields': ('first_name','last_name')}),
         ('Groups', {'fields': ('groups',)}),
         ('Permissions', {'fields': ('user_permissions',)}),
     )
 
-    search_fields = ('email', 'first_name')
+    search_fields = ('email', 'first_name','last_name')
     ordering = ('email',)
     filter_horizontal = ()
 

@@ -4,7 +4,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-
+from django.conf import settings
 # Create your models here.
 
 
@@ -46,19 +46,22 @@ class accountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
+    language = models.CharField(max_length=10,
+                                choices=settings.LANGUAGES,
+                                default=settings.LANGUAGE_CODE)
+    USERNAME_FIELD = 'email'
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    picture = models.ImageField(blank=True, null=True)
+    password = models.CharField(max_length=15)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(default=timezone.now)
+    date_joined = models.DateTimeField(auto_created=True, auto_now_add=True)
     last_login = models.DateTimeField(null=True)
 
     objects = accountManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name','last_name']
+    REQUIRED_FIELDS = ['first_name','last_name','password',]
 
     def get_full_name(self):
         return "{} {}".format(self.first_name,self.last_name)
@@ -74,7 +77,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         return self.is_admin
 
     def __str__(self):
-        return self.name
+        return self.first_name
 
 
 def upload_path(instance, filename):
@@ -83,6 +86,7 @@ def upload_path(instance, filename):
     else:
         random.seed(datetime.now())
         fileid = random.randint(int(1e9), int(1e10))
+        print(fileid)
     new_filename = 'p{0}_{1}'.format(fileid, filename)
     path = 'profile_images'
     return os.path.join(path, new_filename)
@@ -96,8 +100,6 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to=upload_path, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    last_login = models.DateTimeField(blank=True, null=True)
-    last_logout = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.user.first_name

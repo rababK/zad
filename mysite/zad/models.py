@@ -1,67 +1,61 @@
 from django.db import models
-
+from django.conf import settings
 import datetime
 from django.utils import timezone
-
+from django.utils.translation import gettext_lazy as T
 from phone_field import PhoneField, PhoneWidget
-# from django.contrib.auth.models import User, get_user_model
-from django.contrib.auth.models import AbstractUser
-from django.conf import settings
-from .managers import CustomUserManager
-# Create your models here.
-import random
-import os
-import uuid
+_ = lambda s: s
 
 def upload_path(instance, filename):
     imagename, extension = filename.split(".")
+    title = instance.Ad_title
+    return 'post/{}.{}'.format(title, extension)
 
-    return "post/%s.%s" % (instance.id, extension)
 
 
-# settings.AUTH_USER_MODEL
+
 
 class AD(models.Model):
-    #id=models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
-    categories = ((1, 'product'), (2, 'service'), (3, 'course'), (4, 'store'), (5, 'other'))
+    term_choices = ((24, "day"), (48, "tow days"), (72, "three days"))
+    categories = (('product', 'product'), ('service', 'service'), ('course', 'course'), ('store', 'store'), ('other', 'other'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='adder',
+                             verbose_name=T("User:"), help_text=T("User"))
 
-    Ad_title = models.TextField(verbose_name="ad about:", max_length=50, blank=False, editable=True, null=False,
-                                default="null", help_text="TITLE:")
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    Ad_details = models.TextField(verbose_name="ad about:", max_length=500, blank=False, editable=True,
+    Ad_title = models.CharField(verbose_name=T("Ad about:"), max_length=50, blank=False, editable=True, null=False,
+                                default="null", help_text=T("TITLE:"))
+    Ad_details = models.TextField(verbose_name=T("Ad details:"), max_length=500, blank=False, editable=True,
                                   help_text="DETAILS:")
-    create_date = models.DateTimeField(auto_now_add=True, auto_now=False, null=False, blank=False,
-                                       verbose_name="date of publish  the advertice")
-    category = models.IntegerField(choices=categories, blank=False, null=False)
-
+    category = models.CharField(choices=categories,verbose_name=T("category"), blank=False,max_length=10, null=False, help_text="Choose Category:")
+    photo = models.ImageField(blank=False, upload_to='post/')
+    term = models.IntegerField(choices=term_choices, blank=False, null=False, verbose_name=T("publish for"),
+                               help_text="publish for:")
+    approved = models.BooleanField(default=False, blank=True, verbose_name=T("is it approved"), help_text="is it approved")
+    valid = models.BooleanField(default=True, blank=True, verbose_name=T("is it valid"), help_text="is it valid")
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, default=None, related_name='AD_likes',verbose_name=T("like"))
+    created_at = models.DateTimeField(auto_created=True, auto_now_add=True, blank=False, verbose_name=T("create date"),
+                                      help_text=T("Created At:"))
+    update_at = models.DateTimeField(auto_created=True, auto_now=True, verbose_name=T("update date"),
+                                     help_text=T("Updated At:"))
+    publish_date = models.DateTimeField(blank=True, null=True, verbose_name=T("publish At"), help_text=_("publish At:"))
     objects = models.Manager()
 
-    photo = models.ImageField(blank=False, upload_to=upload_path, help_text="PHOTO:")
+    class Meta:
+        verbose_name = T('AD')
+        verbose_name_plural = T('ADS')
+
+    def number_of_likes(self):
+        return self.likes.count()
+
+
+    def make_un_valid(self):
+
+        if self.approved and self.publish_date+datetime.timedelta(hours=self.term)>timezone.now():
+            self.valid =False
+
 
     def __str__(self):
         return self.Ad_title
 
 
-class post(models.Model):
-    period_choices = ((24, "day"), (48, "tow days"), (72, "three days"))
-    AD = models.ForeignKey(AD, on_delete=models.CASCADE, related_name='post', blank=False)
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='adder')
-    publish_date = models.DateTimeField(auto_created=True, auto_now_add=True)
-    period = models.IntegerField(choices=period_choices, blank=False, null=False, help_text="PERIOD")
-    approved = models.BooleanField(default=False, blank=True)
-    unvalid = models.BooleanField(default=False, blank=True)
-    vote = models.IntegerField(blank=True, null=False, help_text="VOTE:", default=0)
-    objects = models.Manager()
-
-    def __str__(self):
-        return self.AD.Ad_title
 
 
-class comment(models.Model):
-    post = models.ForeignKey(post, on_delete=models.CASCADE, related_name='comments')
-    comment_text = models.CharField(blank=False, max_length=200, help_text='add comment:')
-
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,  related_name='User_comments')
-
-    def __str__(self):
-        return self.comment_text
