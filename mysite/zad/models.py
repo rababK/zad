@@ -3,7 +3,7 @@ from django.conf import settings
 import datetime
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as T
-from phone_field import PhoneField, PhoneWidget
+
 _ = lambda s: s
 
 def upload_path(instance, filename):
@@ -37,6 +37,7 @@ class AD(models.Model):
     update_at = models.DateTimeField(auto_created=True, auto_now=True, verbose_name=T("update date"),
                                      help_text=T("Updated At:"))
     publish_date = models.DateTimeField(blank=True, null=True, verbose_name=T("publish At"), help_text=_("publish At:"))
+
     objects = models.Manager()
 
     class Meta:

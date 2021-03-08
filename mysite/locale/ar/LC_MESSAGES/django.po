@@ -104,4 +104,4 @@ msgid "welcome to zad app"
 msgstr "مرحبا بك في تطبيق زاد"
 
 msgid "show my ads"
-msgstr " وريني اعلاناتي"
+msgstr "  اعلاناتي"

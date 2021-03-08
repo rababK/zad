@@ -7,13 +7,12 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.conf import settings
 # Create your models here.
 
-
+from django.core.validators import RegexValidator
 # new_file_name -> p{user_id}_{file_name_in_user_os}
 # use this format to extract file_name in user_os
 # new_file_name is needed for unique file_name of our own choice
 from django.utils import timezone
-
-
+from phonenumber_field.modelfields import PhoneNumberField
 class accountManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
@@ -54,6 +53,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=15)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    phone_number = PhoneNumberField(blank=True, help_text='Contact phone number')
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_created=True, auto_now_add=True)

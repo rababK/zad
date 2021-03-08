@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import  AD
-from phone_field import PhoneField, PhoneWidget
+
 
 class ADForm(forms.ModelForm):
     class Meta():

@@ -39,13 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'registration.apps.RegistrationConfig',
+    'phonenumber_field',
     'zad.apps.ZadConfig',
     'rest_framework',
     'api.apps.ApiConfig',
 
 ]
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+'NAME': 'mydatabase',
+    }
+}
 MIDDLEWARE = [
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -102,12 +108,6 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 
 # Password validation

@@ -4,15 +4,15 @@ from django import forms
 from .models import UserProfile, Account
 from . import restrictions
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-
-
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 class AccountCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-
+    phone = PhoneNumberField(widget= PhoneNumberPrefixWidget(initial="SD"))
     class Meta:
         model = Account
-        fields = ('email', 'first_name','last_name',)
+        fields = ('email', 'first_name','last_name','phone')
 
     def clean_password2(self):
         # Check that the two password entries match

@@ -8,14 +8,14 @@ from django.contrib.auth.decorators import login_required
 from django.utils import translation
 from django.conf import settings
 
-@login_required
+
 def home(request):
     Ads = AD.objects.all()
     return HttpResponse(render(request, 'zad/home.html', {'Ads': Ads}))
 
 
 
-@login_required
+
 def Add_new_AD(request):
     if request.method == 'POST':
         AD_form = ADForm(request.POST, request.FILES)
@@ -33,7 +33,7 @@ def Add_new_AD(request):
         AD_form = ADForm()
         return render(request, 'zad/Add_AD.html', {'form': AD_form})
 
-@login_required
+
 def ContactUs(request):
     if request.method == 'POST':
         contact_form = ContactForm(request.POST)
@@ -51,19 +51,19 @@ def ContactUs(request):
         contact_form = ContactForm()
         return render(request, 'zad/contactUs.html', {'contact_form': contact_form})
 
-@login_required
+
 def AD_details(request, pk):
     Ad = AD.objects.get(pk=pk)
     return render(request, 'zad/Ad_details.html', {'Ad': Ad})
 
-@login_required
+
 def MyAd(request):
     ads = AD.objects.all()[:]
     return render(request, 'zad/My_Ad.html', {'ads': ads})
 
 
 
-@login_required
+
 def like_Ad(request,pk):
 
     Ad = AD.objects.get(pk=pk)
@@ -74,7 +74,7 @@ def like_Ad(request,pk):
     return HttpResponseRedirect(reverse('zad:home'))
 
 
-@login_required
+
 def set_language(request):
     language = request.POST.get('language', settings.LANGUAGE_CODE)
     translation.activate(language)
