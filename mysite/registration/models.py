@@ -48,12 +48,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
     language = models.CharField(max_length=10,
                                 choices=settings.LANGUAGES,
                                 default=settings.LANGUAGE_CODE)
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'phone_number'
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=15)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    phone_number = PhoneNumberField(blank=True, help_text='Contact phone number')
+    phone_number = PhoneNumberField(blank=True, help_text='Contact phone number', unique=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_created=True, auto_now_add=True)

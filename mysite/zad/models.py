@@ -25,7 +25,7 @@ class AD(models.Model):
                                 default="null", help_text=T("TITLE:"))
     Ad_details = models.TextField(verbose_name=T("Ad details:"), max_length=500, blank=False, editable=True,
                                   help_text="DETAILS:")
-    category = models.CharField(choices=categories,verbose_name=T("category"), blank=False,max_length=10, null=False, help_text="Choose Category:")
+    category = models.CharField(verbose_name=T("category"), blank=False,max_length=30, null=False, help_text="Choose Category:")
     photo = models.ImageField(blank=False, upload_to='post/')
     term = models.IntegerField(choices=term_choices, blank=False, null=False, verbose_name=T("publish for"),
                                help_text="publish for:")

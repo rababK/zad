@@ -55,10 +55,10 @@ def register(request):
 
 def login(request):
     if request.method == 'POST':
-        Email = request.POST.get('Email')
+        phone = request.POST.get('phone_number')
         password = request.POST.get('password')
-        print(Email,password)
-        user = auth.authenticate(username=Email, password=password)
+        print(phone,password)
+        user = auth.authenticate(username=phone, password=password)
 
         if user:
             if user.is_active:
