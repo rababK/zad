@@ -151,9 +151,9 @@ _ = lambda s: s
 
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
-STATICFILES_DIRS = (
+'''STATICFILES_DIRS = (
     os.path.join(os.path.dirname(BASE_DIR), "static", "static"),
-)
+)'''
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
