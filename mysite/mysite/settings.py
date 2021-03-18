@@ -15,7 +15,7 @@ import os
 from django.utils.translation import ungettext_lazy as _
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-django_heroku.settings(locals())
+
 #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -191,3 +191,4 @@ MULTILINGUAL_LANGUAGES = (
 )
 
 AUTH_USER_MODEL = 'registration.Account'
+django_heroku.settings(locals())
