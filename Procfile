@@ -1,2 +1,1 @@
-
-web: gunicorn zadapp.wsgi
+web: gunicorn ZAD_project.wsgi
