@@ -27,7 +27,8 @@ SECRET_KEY = 'm*dr6has)&_xkt$v$6-kv7bm939&iux^^gcwc*_#cju@xz9*c1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1:8000','zadapp.herokuapp.com']
+
 
 
 # Application definition
