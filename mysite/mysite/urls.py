@@ -15,7 +15,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
    path('admin/', admin.site.urls),
-   path('zad/', include('zad.urls')),
+   path('', include('zad.urls')),
    path('api/', include('api.urls')),
    path('registration/', include('registration.urls')),
    path('', include('django.contrib.auth.urls')),
