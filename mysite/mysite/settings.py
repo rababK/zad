@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import django_heroku
+
 from pathlib import Path
 import os
 from django.utils.translation import ungettext_lazy as _
@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 from django.utils.translation import gettext_lazy as _
-
+import django_heroku
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'm*dr6has)&_xkt$v$6-kv7bm939&iux^^gcwc*_#cju@xz9*c1'
 
@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mysite.registration.apps.RegistrationConfig',
+    'registration.apps.RegistrationConfig',
     'phonenumber_field',
-    'mysite.zad.apps.ZadConfig',
+    'zad.apps.ZadConfig',
     'rest_framework',
     'api.apps.ApiConfig',
 
