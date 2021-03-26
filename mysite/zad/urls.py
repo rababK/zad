@@ -4,7 +4,7 @@ from . import models
 from django.conf.urls import url, include
 from rest_framework import routers
 
-app_name = 'mysite.zad'
+app_name = 'zad'
 urlpatterns = [
 
     path('', views.home, name='home'),

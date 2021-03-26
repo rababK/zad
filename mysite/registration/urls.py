@@ -5,7 +5,7 @@ from . import views
 
 from django.contrib.auth import views as auth_views
 
-app_name = "mysite.registration"
+app_name = "registration"
 
 urlpatterns = [
     path('', views.home, name='home'),

@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'registration.apps.RegistrationConfig',
+    'mysite.registration.apps.RegistrationConfig',
     'phonenumber_field',
-    'zad.apps.ZadConfig',
+    'mysite.zad.apps.ZadConfig',
     'rest_framework',
     'api.apps.ApiConfig',
 
